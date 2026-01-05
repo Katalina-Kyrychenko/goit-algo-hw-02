@@ -1,0 +1,60 @@
+from queue import Queue
+import time
+import uuid
+
+# Ініціалізація черги
+queue = Queue() 
+
+def generate_request():
+    # Створення нової заявки
+    request = f"Request-{uuid.uuid4()}"
+    print(f"Generated: {request}")
+    queue.put(request)
+
+def process_request():
+    # Обробка заявки з черги
+    if not queue.empty():
+        request = queue.get()
+        print(f"Processed: {request}")
+    else:
+        print("Queue is empty")
+
+# Головний цикл програми (з підтримкою як інтерактивного, так і неінтерактивного режимів)
+def main(count: int | None = None):
+    """
+    Main loop of the program.
+
+    If `count` is provided, runs in non-interactive mode for `count` iterations.
+    Otherwise, runs in interactive REPL mode.
+    """
+    if count is not None:
+        for _ in range(count):
+            generate_request()
+            process_request()
+            time.sleep(1)
+        return
+
+    while True:
+        try:
+            user_input = input("Press 'Enter' to continue, or type 'q' and press 'Enter' to quit: ")
+
+            if user_input.lower() == 'q':
+                print("Exiting the program.")
+                break
+
+            generate_request()
+            process_request()
+            time.sleep(1)
+
+        except KeyboardInterrupt:
+            print("\nExiting the program.")
+            break
+
+
+if __name__ == '__main__':
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Run task_1 queue simulator.')
+    parser.add_argument('-n', '--count', type=int, help='Number of non-interactive iterations to run')
+    args = parser.parse_args()
+    main(count=args.count)
