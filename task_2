@@ -1,0 +1,35 @@
+from collections import deque
+
+def is_palindrome(input_string):
+    # 1. Приводимо рядок до нижнього регістру та видаляємо пробіли
+    processed_string = input_string.lower().replace(" ", "")
+    
+    # 2. Створюємо двосторонню чергу
+    char_deque = deque(processed_string)
+    
+    # 3. Порівнюємо символи з обох кінців
+    # Продовжуємо, поки в черзі більше 1 елемента
+    while len(char_deque) > 1:
+        first_char = char_deque.popleft() # Видалити зліва
+        last_char = char_deque.pop()      # Видалити справа
+        
+        if first_char != last_char:
+            return False # Якщо символи не збігаються - це не паліндром
+            
+    return True # Якщо дійшли сюди, рядок симетричний
+
+# Тестування
+test_strings = [
+    "А роза упала на лапу Азора", # Паліндром (ігноруючи пробіли)
+    "Sassas",                      # Паліндром (нечутливий до регістру)
+    "Python",                     # Не паліндром
+    "35653",                      # Паліндром
+    "Noon"                        # Паліндром
+]
+
+print(f"{'Рядок':<30} | {'Паліндром?'}")
+print("-" * 45)
+
+for s in test_strings:
+    result = is_palindrome(s)
+    print(f"{s:<30} | {result}")
